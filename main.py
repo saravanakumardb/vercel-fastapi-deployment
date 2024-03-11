@@ -3,6 +3,22 @@ from fastapi import FastAPI, __version__
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import HTMLResponse
 
+from strawberry.fastapi import GraphQLRouter
+import strawberry
+
+# Define your GraphQL schema using Strawberry
+@strawberry.type
+class Query:
+    @strawberry.field
+    def hello(self, name: str = "World") -> str:
+        return f"Hello {name}"
+
+schema = strawberry.Schema(query=Query)
+
+# Create a GraphQL router
+graphql_app = GraphQLRouter(schema)
+
+# Initialize your FastAPI application
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
@@ -25,6 +41,14 @@ html = f"""
     </body>
 </html>
 """
+
+# Include the GraphQL router in your FastAPI application
+app.include_router(graphql_app, prefix="/graphql")
+
+# Your existing FastAPI route
+@app.get("/")
+def read_root():
+    return {"Hello": "Seattle!"}
 
 @app.get("/")
 async def root():
