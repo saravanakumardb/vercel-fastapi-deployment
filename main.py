@@ -35,6 +35,7 @@ html = f"""
             <ul>
                 <li><a href="/docs">/docs</a></li>
                 <li><a href="/redoc">/redoc</a></li>
+                <li><a href="/graphql">/graphql</a></li>
             </ul>
             <p>Powered by <a href="https://vercel.com" target="_blank">Vercel</a></p>
         </div>
@@ -46,7 +47,7 @@ html = f"""
 app.include_router(graphql_app, prefix="/graphql")
 
 # Your existing FastAPI route
-@app.get("/")
+@app.get("/hello")
 def read_root():
     return {"Hello": "Seattle!"}
 
